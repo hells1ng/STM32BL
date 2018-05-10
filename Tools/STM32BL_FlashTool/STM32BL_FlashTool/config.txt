@@ -1,0 +1,7 @@
+C:\Electronics_projects\stm32_projects\ImpulseCounter\code\ImpulseCounter_01\MDK-ARM\ImpulseCounter\ImpulseCounter.hex
+0,1,2,3,4,5,6,7,8
+aa aa 01 7f 00 00 d4
+aa aa 01 7f 32 32 38
+aa aa 01 7f 64 64 9C
+1,2,3,4,5,6,7,8
+
