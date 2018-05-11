@@ -38,9 +38,7 @@
 **
 ****************************************************************************/
 
-//#include <QtWidgets>
 #include <QTimer>
-#include <QJsonObject>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -53,26 +51,13 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose);
 
     timer = new QTimer();
-    //textEdit = new QTextEdit;
-    //setCentralWidget(textEdit);
 
     createActions();
     createMenus();
     (void)statusBar();
 
     setWindowFilePath(QString());
-    //resize(400, 300);
     transactionCount = 0;
-    //configFile.setFileName("\config.h");
-
-    /* SIGNALS AND SLOTS*/
-    //ui->progressBar->setRange(0, 1);
-    //connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(close()));
-    //ui->label->setText(title);
-    //ui->pin->setText(pin);
-
-    //connect(ui->buttonBox, SIGNAL(accepted()), this, SIGNAL(accepted()));
-    //connect(ui->buttonBox, SIGNAL(rejected()), this, SIGNAL(rejected()));
 
     refreshSerial();
 
@@ -139,7 +124,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->addressComboBox->addItems(ui->addressesLabel->text().split(','));
     ui->addressComboBox->setFocus();
     ui->requestLineEdit->setText("aa aa 01 7f 00 00 d4");
-    //qDebug() << ui->addressComboBox->currentText().toInt();
     udpflag = MasterThread::UDP_CMD_NO_CMD;
 
 }
@@ -224,26 +208,11 @@ void MainWindow::about()
 
 void MainWindow::createActions()
 {
-/*    newAct = new QAction(tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("Create a new file"));
-    connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
-*/
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(tr("Open an existing file"));
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
-/*
-    saveAct = new QAction(tr("&Save"), this);
-    saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save the document to disk"));
-    connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
-    saveAsAct = new QAction(tr("Save &As..."), this);
-    saveAsAct->setShortcuts(QKeySequence::SaveAs);
-    saveAsAct->setStatusTip(tr("Save the document under a new name"));
-    connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
-*/
     for (int i = 0; i < MaxRecentFiles; ++i) {
         recentFileActs[i] = new QAction(this);
         recentFileActs[i]->setVisible(false);
@@ -259,11 +228,6 @@ void MainWindow::createActions()
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
-
-/*    aboutQtAct = new QAction(tr("About &Qt"), this);
-    aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-    connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-*/
 }
 
 void MainWindow::createMenus()
@@ -348,6 +312,11 @@ void MainWindow::open_hex()
     //        qWarning() << tr("QJsonObject[appName] of value: ") << item["imp"];
     //        QJsonArray test = item["imp"].toArray();
     //        qWarning() << test[1].toString();
+            fileName = subobj.toString();
+            loadFile(fileName);
+            setCurrentFile(fileName);
+
+            ui->addressesLabel->setText(str2);
 
         }
         catch (...)
@@ -390,36 +359,12 @@ void MainWindow::loadFile(const QString &fileName)
              }
          }
     }
-    //удаляем лишние строки
-    /*
-    vector.erase(vector.begin()+vector.size()-1);
-    vector.erase(vector.begin()+vector.size()-1);
-    vector.erase(vector.begin());
-    */
+
     for (int i = 0; i < vector.size(); i++)
     {
         ui->textEdit->append(vector[i]);
     }
-/*
-    foreach (const QString & num, vector[0].split('-')) {
-            bool ok = false;
-            int numInInt = num.toInt(&ok, 16);          // конвертируем из строкового представления
-            //Q_ASSERT(ok);                               // ковертация прошла удачно
-            //Q_ASSERT(numInInt >= 0 && numInInt <= 255); // итоговое число поместится в unsigned char
-            outArray.append(reinterpret_cast<char>(( char)numInInt));       // добавляем число в итоговый массив
-        }
-    qDebug() << QString(outArray.toHex());
-    qDebug() << (outArray.size());
-*/
-    //QByteArray line = vector[0].size();
-     //ui->textEdit->append(line);
-    //QTextStream in(&file);
-    //QApplication::setOverrideCursor(Qt::WaitCursor);
-    //textEdit->setPlainText(in.readAll());
-    //ui->textEdit->setPlainText(in.readAll());
 
-    //QByteArray block = fileIn.readAll();
-    //ui->textEdit->setText(in.readAll());
     ui->label->setText(fileName);
     QApplication::restoreOverrideCursor();
 
@@ -469,7 +414,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
             mainWin->updateRecentFileActions();
     }
 
-    //updateRecentFileActions();
+//    updateRecentFileActions();
 }
 
 void MainWindow::updateRecentFileActions()
@@ -495,7 +440,6 @@ QString MainWindow::strippedName(const QString &fullFileName)
 {
     return QFileInfo(fullFileName).fileName();
 }
-
 
 void MainWindow::transaction_reset() //при нажатии на Reset
 {

@@ -46,6 +46,7 @@
 #include <QMainWindow>
 #include <QtWidgets>
 #include <QtSerialPort/QSerialPortInfo>
+#include <QJsonObject>
 
 #include "masterthread.h"
 

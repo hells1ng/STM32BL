@@ -1,6 +1,6 @@
 {
    "hex": {
-      "path": "C:/Electronics_projects/stm32_projects/ImpulseCounter/code/ImpulseCounter_01/MDK-ARM/ImpulseCounter/ImpulseCounter.hex"
+      "path": "../Demo.hex"
    },
    "slaves": {
       "addresses":["0","1","2","3","4","5","6","7","8"]
