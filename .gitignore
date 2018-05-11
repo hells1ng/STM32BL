@@ -1,2 +1,4 @@
 Tools/STM32BL_FlashTool/bin/
+Tools/STM32BL_FlashTool/bin/debug
+Tools/STM32BL_FlashTool/bin/release
 MDK-ARM/Bootloader/
