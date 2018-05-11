@@ -76,13 +76,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void newFile();
-    void open();
-    void save();
-    void saveAs();
-    void openRecentFile();
-    void about();
-    void refreshSerial();
+    void open();            // File->Open button
+    void about();           // About button
+    void refreshSerial();   // Refresh button
 
     void transaction_reset();
     void transaction_erase();
@@ -90,10 +86,8 @@ private slots:
     void transaction_flashall();
     void transaction_gotoapp();
     void transaction_send();
-
     void transaction_read();
     void transaction_write();
-    void transaction_writeall();
 
     void showResponse(int CMD, const QString &req, const QString &s, QByteArray respBytes);
     void showFail(const QString &s);
@@ -107,45 +101,34 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
     void createActions();
     void createMenus();
     void loadFile(const QString &fileName);
-    void saveFile(const QString &fileName);
-    void setCurrentFile(const QString &fileName);
-    void updateRecentFileActions();
-    void open_hex();
-    QString strippedName(const QString &fullFileName);
 
-    void setControlsEnabled(bool enable);
+    void read_settings();
     void create_addresses();
     QByteArray get_oneAddress();
     void get_hexReqFromFile();
+    void setControlsEnabled(bool enable);
 
-    //QFile configFile;
-    QString curFile;
-    QTextEdit *textEdit;
     QMenu *fileMenu;
-    QMenu *recentFilesMenu;
     QMenu *helpMenu;
-    QAction *newAct;
     QAction *openAct;
-    QAction *saveAct;
-    QAction *saveAsAct;
     QAction *exitAct;
     QAction *aboutAct;
-    QAction *aboutQtAct;
     QAction *separatorAct;
 
     QTextStream out; //input hex and output bin
     QVector <QString> vector;
     QByteArray outArray;
-    enum { MaxRecentFiles = 5 };
-    QAction *recentFileActs[MaxRecentFiles];
+
     QString fileName;
     int transactionCount;
     int udpflag;
-    QByteArray addressesByteArray;
+
+    QByteArray      addressesByteArray;
+
+    QJsonArray      addressesJsonArray;
 
     MasterThread thread;
 };
