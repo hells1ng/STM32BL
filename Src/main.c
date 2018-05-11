@@ -174,7 +174,6 @@ int main(void)
 						
 				case STM32BL_CMD_FLASHCRC:
 					
-						STM32BL_Flash_ErasePage(STM32BL_FLASH_CRC_ADDR);
 						if (STM32BL_Flash_Write32(STM32BL_FLASH_CRC_ADDR, STM32BL_FLASH_CRC_VAL) == STM32BL_FLASH_RES_OK)
 						{
 							Serial_ready_to_receive();
