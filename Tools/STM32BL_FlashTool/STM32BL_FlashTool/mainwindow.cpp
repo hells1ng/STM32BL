@@ -40,6 +40,7 @@
 
 //#include <QtWidgets>
 #include <QTimer>
+#include <QJsonObject>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -78,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->waitResponseSpinBox->setRange(0, 10000);
     ui->waitResponseSpinBox->setValue(3000);
 
-    setWindowTitle(tr("Stm32Flasher"));
+    setWindowTitle(tr("Stm32BL_FlashTool"));
     ui->serialPortComboBox->setFocus();
 
 
@@ -292,7 +293,7 @@ void MainWindow::open_hex()
     configFile.setFileName("../STM32BL_FlashTool/config.txt");
 
     if (!configFile.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Error"), tr("Cannot open config.h"));
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open config.txt"));
         return;
     }
     else
@@ -315,6 +316,46 @@ void MainWindow::open_hex()
 
      ui->addressesLabel->setText(str2);
     }
+
+    QString val;
+    QFile file;
+    file.setFileName("../STM32BL_FlashTool/settings.txt");
+
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open settings.txt"));
+        return;
+    }
+    else
+    {
+        val = file.readAll();
+        file.close();
+        qWarning() << val;
+        try {
+
+            QJsonDocument   d = QJsonDocument::fromJson(val.toUtf8());
+            QJsonObject     o = d.object();
+
+            QJsonValue      hexFile = o.value(QString("hex"));
+            QJsonObject     item1 = hexFile.toObject();
+            QJsonValue      subobj = item1["path"];
+            qWarning() << "HexPath = " << subobj.toString();
+
+            QJsonValue      slaves = o.value(QString("slaves"));
+            QJsonObject     item2 = slaves.toObject();
+            QJsonArray      addresses = item2["addresses"].toArray();
+            qWarning() << "Addresses of Slaves = " << addresses;
+    //        /* in case of array get array and convert into string*/
+    //        qWarning() << tr("QJsonObject[appName] of value: ") << item["imp"];
+    //        QJsonArray test = item["imp"].toArray();
+    //        qWarning() << test[1].toString();
+
+        }
+        catch (...)
+        {
+            qDebug() << "Wrong settings.txt";
+        }
+    }
+
 }
 void MainWindow::loadFile(const QString &fileName)
 {
