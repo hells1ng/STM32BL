@@ -91,7 +91,7 @@ uint8_t STM32BL_Flash_CheckCRC()
 {	
 	uint32_t Addr = STM32BL_FLASH_CRC_ADDR;
 
-  if((*(__IO uint32_t*) Addr) == STM32BL_FLASH_CRC_VAL)
+  if ((*(__IO uint32_t*) Addr) == STM32BL_FLASH_CRC_VAL)
 		return 1;
 	else
 		return 0;
